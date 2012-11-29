@@ -1,11 +1,25 @@
 require "resque-ffmpeg"
 
 describe Resque::Ffmpeg do
-  it "get_aspect" do
-    Resque::Ffmpeg.get_aspect("~/Dropbox/pasokara_test_data/BigBuckBunny_640x360.mp4").should eq "16/9".to_r
+  SAMPLE_DIR = File.join(File.dirname(File.expand_path(__FILE__)), "..", "samples")
+  describe ".get_aspect" do
+    subject { Resque::Ffmpeg.get_aspect("#{SAMPLE_DIR}/sample.mp4") }
+
+    it { should eq "4/3".to_r }
   end
 
-  it "do_encode" do
-    Resque::Ffmpeg::MP4.new.do_encode("~/Dropbox/pasokara_test_data/sm12312684/sm12312684.mp4", "~/test.mp4")
+  describe "#do_encode" do
+    subject(:encoder) { Resque::Ffmpeg::MP4.new }
+
+    describe "on_progress callback" do
+      before do
+        encoder.on_progress = Proc.new {|progress| true }
+      end
+
+      it "on_progress receive call" do
+        encoder.on_progress.should_receive(:call).with(an_instance_of(Float)).at_least(:once)
+        encoder.do_encode("#{SAMPLE_DIR}/sample.mp4", "#{SAMPLE_DIR}/output.mp4")
+      end
+    end
   end
 end
