@@ -21,5 +21,16 @@ describe Resque::Ffmpeg do
         encoder.do_encode("#{SAMPLE_DIR}/sample.mp4", "#{SAMPLE_DIR}/output.mp4")
       end
     end
+
+    describe "on_complete callback" do
+      before do
+        encoder.on_complete = Proc.new {|encoder| true }
+      end
+
+      it "on_complete receive call" do
+        encoder.on_complete.should_receive(:call).with(encoder).once
+        encoder.do_encode("#{SAMPLE_DIR}/sample.mp4", "#{SAMPLE_DIR}/output.mp4")
+      end
+    end
   end
 end

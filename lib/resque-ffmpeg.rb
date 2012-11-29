@@ -19,7 +19,8 @@ module Resque
 
     class Base
       attr_reader :size, :vcodec, :video_bitrate, :acodec, :audio_bitrate, :audio_sample_rate, :other_options
-      attr_reader :on_progress
+      attr_reader :input_filename, :output_filename
+      attr_reader :on_progress, :on_complete
 
       def initialize(options = {})
         raise ArgumentError unless options.is_a?(Hash)
@@ -32,7 +33,6 @@ module Resque
         @audio_bitrate     = merged_options[:audio_bitrate]
         @audio_sample_rate = merged_options[:audio_sample_rate]
         @other_options     = merged_options[:other_options]
-        @on_progress       = nil
       end
 
       def preset_options
@@ -52,9 +52,16 @@ module Resque
         @on_progress = progress_proc
       end
 
-      def do_encode(filename, output)
+      def on_complete=(complete_proc)
+        raise ArgumentError unless complete_proc.is_a?(Proc)
+        @on_complete = complete_proc
+      end
+
+      def do_encode(input, output)
+        @input_filename = input
+        @output_filename = output
         cmd = <<-CMD
-        ffmpeg -y -i '#{filename}' -f #{format} -s #{size} -aspect #{aspect(filename)} -vcodec #{vcodec} -b:v #{video_bitrate} -acodec #{acodec} -ar #{audio_sample_rate} -b:a #{audio_bitrate} -flags +loop -cmp +chroma -partitions +parti8x8+parti4x4+partp8x8+partp4x4 -me_method hex -subq 6 -me_range 16 -g 250 -keyint_min 25 -sc_threshold 40 -i_qfactor 0.71 -b_strategy 1 -qcomp 0.6 -qmin 10 -qmax 51 -qdiff 4 -maxrate 1000k -coder 0 -level 30 -async 2 -threads 4 #{output}
+        ffmpeg -y -i '#{@input_filename}' -f #{format} -s #{size} -aspect #{aspect(@input_filename)} -vcodec #{vcodec} -b:v #{video_bitrate} -acodec #{acodec} -ar #{audio_sample_rate} -b:a #{audio_bitrate} -flags +loop -cmp +chroma -partitions +parti8x8+parti4x4+partp8x8+partp4x4 -me_method hex -subq 6 -me_range 16 -g 250 -keyint_min 25 -sc_threshold 40 -i_qfactor 0.71 -b_strategy 1 -qcomp 0.6 -qmin 10 -qmax 51 -qdiff 4 -maxrate 1000k -coder 0 -level 30 -async 2 -threads 4 #{@output_filename}
         CMD
         cmd.strip!
         duration = nil
@@ -75,6 +82,8 @@ module Resque
             on_progress.call(progress) if on_progress
           end
         end
+
+        on_complete.call(self) if on_complete
       end
     end
 
