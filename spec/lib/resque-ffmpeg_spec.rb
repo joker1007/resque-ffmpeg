@@ -9,7 +9,7 @@ describe Resque::Ffmpeg do
   end
 
   describe "#do_encode" do
-    subject(:encoder) { Resque::Ffmpeg::MP4.new }
+    subject(:encoder) { Resque::Ffmpeg::Encoder::MP4.new }
 
     describe "on_progress callback" do
       before do
