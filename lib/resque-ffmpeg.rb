@@ -19,6 +19,8 @@ module Resque
 
     module BaseJob
       def perform(input_filename, output_filename, format = :mp4)
+        encoder = Encoder::MP4.new
+        encoder.do_encode(input_filename, output_filename)
       end
     end
 
