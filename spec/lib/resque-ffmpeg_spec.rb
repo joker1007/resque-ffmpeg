@@ -37,16 +37,50 @@ describe Resque::Ffmpeg do
 end
 
 describe Resque::Ffmpeg::BaseJob do
-  class ::TestJob
-    extend Resque::Ffmpeg::BaseJob
-  end
-
   context "When job is performed" do
+    class ::TestJob
+      extend Resque::Ffmpeg::BaseJob
+    end
+
     it "should receive do_encode" do
       input_filename = "#{sample_dir}/sample.mp4"
       output_filename = "#{sample_dir}/output.mp4"
       Resque::Ffmpeg::Encoder::MP4.any_instance.should_receive(:do_encode).with(input_filename, output_filename).once
       perform_job(::TestJob, input_filename, output_filename)
+    end
+  end
+
+  context "Job class has on_progress method" do
+    class ::ProgressJob
+      extend Resque::Ffmpeg::BaseJob
+
+      def self.on_progress(progress)
+        true
+      end
+    end
+
+    it "should receive on_progress" do
+      input_filename = "#{sample_dir}/sample.mp4"
+      output_filename = "#{sample_dir}/output.mp4"
+      ::ProgressJob.should_receive(:on_progress).with(an_instance_of(Float)).at_least(:once)
+      perform_job(::ProgressJob, input_filename, output_filename)
+    end
+  end
+
+  context "Job class has on_complete method" do
+    class ::CompleteJob
+      extend Resque::Ffmpeg::BaseJob
+
+      def self.on_complete(encoder)
+        true
+      end
+    end
+
+    it "should receive on_complete" do
+      input_filename = "#{sample_dir}/sample.mp4"
+      output_filename = "#{sample_dir}/output.mp4"
+      ::CompleteJob.should_receive(:on_complete).with(an_instance_of(Resque::Ffmpeg::Encoder::MP4)).once
+      perform_job(::CompleteJob, input_filename, output_filename)
     end
   end
 end
