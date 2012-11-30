@@ -3,9 +3,9 @@ require "resque-ffmpeg"
 describe Resque::Ffmpeg do
   SAMPLE_DIR = File.join(File.dirname(File.expand_path(__FILE__)), "..", "samples")
   describe ".get_aspect" do
-    subject { Resque::Ffmpeg.get_aspect("#{SAMPLE_DIR}/sample.mp4") }
+    subject { Resque::Ffmpeg.get_aspect("#{SAMPLE_DIR}/sample_16_9.mp4") }
 
-    it { should eq "4/3".to_r }
+    it { should eq "16/9".to_r }
   end
 
   describe "#do_encode" do
