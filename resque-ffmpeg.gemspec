@@ -1,15 +1,15 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'resque-ffmpeg/version'
+require 'resque-ffmpeg'
 
 Gem::Specification.new do |gem|
   gem.name          = "resque-ffmpeg"
   gem.version       = Resque::Ffmpeg::VERSION
   gem.authors       = ["joker1007"]
   gem.email         = ["kakyoin.hierophant@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{easier way to use ffmpeg in resque}
+  gem.summary       = %q{easier way to use ffmpeg in resque}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)

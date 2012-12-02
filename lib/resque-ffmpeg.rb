@@ -1,3 +1,7 @@
-require "resque-ffmpeg/version"
 require "resque/ffmpeg"
 
+module Resque
+  module Ffmpeg
+    VERSION = "0.0.1"
+  end
+end
