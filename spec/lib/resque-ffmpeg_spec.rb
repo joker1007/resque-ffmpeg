@@ -10,27 +10,55 @@ describe Resque::Ffmpeg do
   end
 
   describe "#do_encode" do
-    subject(:encoder) { Resque::Ffmpeg::Encoder::MP4.new }
+    context "MP4" do
+      subject(:encoder) { Resque::Ffmpeg::Encoder::MP4.new }
 
-    describe "on_progress callback" do
-      before do
-        encoder.on_progress = Proc.new {|progress| true }
+      describe "on_progress callback" do
+        before do
+          encoder.on_progress = Proc.new {|progress| true }
+        end
+
+        it "on_progress receive call" do
+          encoder.on_progress.should_receive(:call).with(an_instance_of(Float)).at_least(:once)
+          encoder.do_encode("#{sample_dir}/sample.mp4", "#{sample_dir}/output.mp4")
+        end
       end
 
-      it "on_progress receive call" do
-        encoder.on_progress.should_receive(:call).with(an_instance_of(Float)).at_least(:once)
-        encoder.do_encode("#{sample_dir}/sample.mp4", "#{sample_dir}/output.mp4")
+      describe "on_complete callback" do
+        before do
+          encoder.on_complete = Proc.new {|encoder| true }
+        end
+
+        it "on_complete receive call" do
+          encoder.on_complete.should_receive(:call).with(encoder).once
+          encoder.do_encode("#{sample_dir}/sample.mp4", "#{sample_dir}/output.mp4")
+        end
       end
     end
 
-    describe "on_complete callback" do
-      before do
-        encoder.on_complete = Proc.new {|encoder| true }
+    context "WebM" do
+      subject(:encoder) { Resque::Ffmpeg::Encoder::WebM.new }
+
+      describe "on_progress callback" do
+        before do
+          encoder.on_progress = Proc.new {|progress| true }
+        end
+
+        it "on_progress receive call" do
+          encoder.on_progress.should_receive(:call).with(an_instance_of(Float)).at_least(:once)
+          encoder.do_encode("#{sample_dir}/sample.mp4", "#{sample_dir}/output.webm")
+        end
       end
 
-      it "on_complete receive call" do
-        encoder.on_complete.should_receive(:call).with(encoder).once
-        encoder.do_encode("#{sample_dir}/sample.mp4", "#{sample_dir}/output.mp4")
+      describe "on_complete callback" do
+        before do
+          encoder.on_complete = Proc.new {|encoder| true }
+        end
+
+        it "on_complete receive call" do
+          encoder.on_complete.should_receive(:call).with(encoder).once
+          encoder.do_encode("#{sample_dir}/sample.mp4", "#{sample_dir}/output.webm")
+        end
       end
     end
   end

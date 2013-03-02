@@ -5,6 +5,7 @@ module Resque
     module Encoder
       autoload :Base, "#{File.dirname(__FILE__)}/ffmpeg/encoder/base"
       autoload :MP4, "#{File.dirname(__FILE__)}/ffmpeg/encoder/mp4"
+      autoload :WebM, "#{File.dirname(__FILE__)}/ffmpeg/encoder/webm"
     end
 
     class << self

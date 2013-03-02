@@ -58,7 +58,7 @@ module Resque
           time = nil
           progress = nil
           ffmpeg = IO.popen("#{cmd} 2>&1")
-          ffmpeg.each("\r") do |line|
+          ffmpeg.each_line do |line|
             if line =~ /Duration:(\s.?(\d*):(\d*):(\d*)\.(\d*))/
               duration = $2.to_i * 3600 + $3.to_i * 60 + $4.to_i
             end
@@ -67,7 +67,7 @@ module Resque
               time = $2.to_i * 3600 + $3.to_i * 60 + $4.to_i
             end
 
-            if time && duration
+            if duration && time
               progress = (time / duration.to_f)
               on_progress.call(progress) if on_progress
             end
