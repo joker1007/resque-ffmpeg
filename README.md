@@ -1,12 +1,16 @@
 # Resque::Ffmpeg
+[![Build Status](https://travis-ci.org/joker1007/rescue-ffmpeg.png)](https://travis-ci.org/joker1007/rescue-ffmpeg)
 
-TODO: Write a gem description
+easier way to use ffmpeg in resque
+
+## Requirements
+- ffmpeg-1.1 with libx264 and libvpx and libfaac
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'resque-ffmpeg'
+    gem 'resque-ffmpeg', github: "joker1007/rescue-ffmpeg"
 
 And then execute:
 
