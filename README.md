@@ -1,5 +1,5 @@
 # Resque::Ffmpeg
-[![Build Status](https://travis-ci.org/joker1007/rescue-ffmpeg.png)](https://travis-ci.org/joker1007/rescue-ffmpeg)
+[![Build Status](https://travis-ci.org/joker1007/resque-ffmpeg.png)](https://travis-ci.org/joker1007/resque-ffmpeg)
 
 easier way to use ffmpeg in resque
 
