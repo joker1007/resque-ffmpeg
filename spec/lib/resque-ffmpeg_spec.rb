@@ -34,6 +34,22 @@ describe Resque::Ffmpeg do
           encoder.do_encode("#{sample_dir}/sample.mp4", "#{sample_dir}/output.mp4")
         end
       end
+
+      describe "debug log" do
+        before do
+          ENV["DEBUG"] = "1"
+          Resque::Ffmpeg.logger.should be_a(Logger)
+        end
+
+        after do
+          ENV["DEBUG"] = nil
+        end
+
+        it "should call logger.debug" do
+          Resque::Ffmpeg.logger.should_receive(:debug)
+          encoder.do_encode("#{sample_dir}/sample.mp4", "#{sample_dir}/output.mp4")
+        end
+      end
     end
 
     context "WebM" do

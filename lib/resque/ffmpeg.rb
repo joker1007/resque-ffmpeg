@@ -1,3 +1,5 @@
+require "logger"
+
 module Resque
   module Ffmpeg
     autoload :BaseJob, "#{File.dirname(__FILE__)}/ffmpeg/base_job"
@@ -9,6 +11,14 @@ module Resque
     end
 
     class << self
+      def logger
+        @logger ||= Logger.new($stdout)
+      end
+
+      def logger=(logger)
+        @logger = logger
+      end
+
       def get_aspect(filename)
         return nil unless filename
 

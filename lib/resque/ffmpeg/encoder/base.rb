@@ -54,6 +54,11 @@ module Resque
           ffmpeg -y -i '#{@input_filename}' -f #{format} -s #{size} -aspect #{aspect(@input_filename)} -vcodec #{vcodec} -b:v #{video_bitrate} -acodec #{acodec} -ar #{audio_sample_rate} -b:a #{audio_bitrate} #{other_options} #{@output_filename}
           CMD
           cmd.strip!
+
+          if ENV["DEBUG"]
+            Resque::Ffmpeg.logger.debug(cmd)
+          end
+
           duration = nil
           time = nil
           progress = nil
