@@ -17,7 +17,7 @@ module Resque
         end
 
         def acodec
-          "vorbis"
+          "libvorbis"
         end
 
         def format
