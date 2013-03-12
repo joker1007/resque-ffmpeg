@@ -1,7 +1,8 @@
 language: ruby
+install: libx264-dev libvpx-dev libfaac-dev yasm
 before_script:
-  - "sudo aptitude -y -q install libx264-dev libvpx-dev libfaac-dev yasm"
   - "sudo ci/install_ffmpeg"
+  - ls
   - "export PATH=ffmpeg/bin:$PATH"
   - "ffmpeg -version"
 script: "bundle exec rspec spec"
