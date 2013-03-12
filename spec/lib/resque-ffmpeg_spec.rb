@@ -82,7 +82,7 @@ describe Resque::Ffmpeg::BaseJob do
     class ::ProgressJob
       extend Resque::Ffmpeg::BaseJob
 
-      def self.on_progress(progress)
+      def self.on_progress(progress, extra_data = {})
         true
       end
     end
@@ -90,7 +90,7 @@ describe Resque::Ffmpeg::BaseJob do
     it "should receive on_progress" do
       input_filename = "#{sample_dir}/sample.mp4"
       output_filename = "#{sample_dir}/output.mp4"
-      ::ProgressJob.should_receive(:on_progress).with(an_instance_of(Float)).at_least(:once)
+      ::ProgressJob.should_receive(:on_progress).with(an_instance_of(Float), {}).at_least(:once)
       perform_job(::ProgressJob, input_filename, output_filename)
     end
   end
@@ -99,7 +99,7 @@ describe Resque::Ffmpeg::BaseJob do
     class ::CompleteJob
       extend Resque::Ffmpeg::BaseJob
 
-      def self.on_complete(encoder)
+      def self.on_complete(encoder, extra_data = {})
         true
       end
     end
@@ -107,7 +107,7 @@ describe Resque::Ffmpeg::BaseJob do
     it "should receive on_complete" do
       input_filename = "#{sample_dir}/sample.mp4"
       output_filename = "#{sample_dir}/output.mp4"
-      ::CompleteJob.should_receive(:on_complete).with(an_instance_of(Resque::Ffmpeg::Encoder::MP4)).once
+      ::CompleteJob.should_receive(:on_complete).with(an_instance_of(Resque::Ffmpeg::Encoder::MP4), {}).once
       perform_job(::CompleteJob, input_filename, output_filename)
     end
   end
