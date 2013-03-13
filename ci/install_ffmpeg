@@ -7,5 +7,5 @@ mv $version ffmpeg_src
 mkdir ffmpeg
 current=`pwd`
 cd ffmpeg_src
-./configure --prefix=$current/ffmpeg --enable-pthreads --enable-gpl --enable-version3 --enable-nonfree --enable-libx264 --enable-libvpx --enable-libfaac
+./configure --prefix=$current/ffmpeg --enable-pthreads --enable-gpl --enable-version3 --enable-nonfree --enable-libx264 --enable-libvpx --enable-libfaac --enable-libvorbis
 make && make install
