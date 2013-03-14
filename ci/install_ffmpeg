@@ -1,6 +1,10 @@
 #!/bin/bash
 
-version=ffmpeg-1.1.3
+if [ "${FFMPEG_VERSION}" = "" ]; then
+  version=ffmpeg-1.1.3
+else
+  version=ffmpeg-${FFMPEG_VERSION}
+fi
 wget http://www.ffmpeg.org/releases/$version.tar.bz2
 tar xjf $version.tar.bz2
 mv $version ffmpeg_src

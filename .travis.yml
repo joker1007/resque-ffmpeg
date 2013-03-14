@@ -10,3 +10,6 @@ script: "bundle exec rspec spec"
 rvm:
   - 2.0.0
   - 1.9.3
+env:
+  - FFMPEG_VERSION=1.1.3
+  - FFMPEG_VERSION=1.0.5
