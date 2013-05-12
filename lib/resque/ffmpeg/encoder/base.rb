@@ -1,3 +1,5 @@
+require "shellwords"
+
 module Resque
   module Ffmpeg
     module Encoder
@@ -51,7 +53,7 @@ module Resque
           @input_filename = input
           @output_filename = output
           cmd = <<-CMD
-          ffmpeg -y -i '#{@input_filename}' -f #{format} -s #{size} -aspect #{aspect(@input_filename)} -vcodec #{vcodec} -b:v #{video_bitrate} -acodec #{acodec} -ar #{audio_sample_rate} -b:a #{audio_bitrate} #{other_options} #{@output_filename}
+          ffmpeg -y -i #{@input_filename.shellescape} -f #{format} -s #{size} -aspect #{aspect(@input_filename)} -vcodec #{vcodec} -b:v #{video_bitrate} -acodec #{acodec} -ar #{audio_sample_rate} -b:a #{audio_bitrate} #{other_options} #{@output_filename.shellescape}
           CMD
           cmd.strip!
 

@@ -1,4 +1,5 @@
 require "logger"
+require "shellwords"
 
 module Resque
   module Ffmpeg
@@ -23,7 +24,7 @@ module Resque
         return nil unless filename
 
         aspect = nil
-        ffmpeg = IO.popen("ffmpeg -i '#{filename}' 2>&1")
+        ffmpeg = IO.popen("ffmpeg -i #{filename.shellescape} 2>&1")
         ffmpeg.each("\r") do |line|
           if line =~ /Stream.*Video.*, (\d+)x(\d+)[,\s]/
             aspect = "#{$1}/#{$2}".to_r
