@@ -1,6 +1,7 @@
 language: ruby
 before_install:
-  - sudo apt-get install libx264-dev libvpx-dev libfaac-dev libvorbis-dev yasm
+  - sudo apt-get update
+  - sudo apt-get -y install libx264-dev libvpx-dev libfaac-dev libvorbis-dev yasm
 before_script:
   - "sudo ci/install_ffmpeg"
   - ls
